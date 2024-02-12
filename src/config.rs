@@ -30,8 +30,8 @@ pub fn create_default_config<T: Into<PathBuf>>(path: T) -> Result<Config, io::Er
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
-    client_id: String,
-    output_folder: PathBuf,
+    pub client_id: String,
+    pub output_folder: PathBuf,
 }
 
 impl Config {

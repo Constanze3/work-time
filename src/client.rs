@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use crate::Config;
 use reqwest::Url;
 use serde_json::json;
@@ -14,12 +16,20 @@ pub trait Client {
 }
 
 pub struct LocalClient {
-    config: Config,
+    id: String,
+    output_folder: PathBuf,
 }
 
 impl LocalClient {
-    pub fn new(config: Config) -> Self {
-        Self { config }
+    pub fn new(id: String, output_folder: PathBuf) -> Self {
+        Self { id, output_folder }
+    }
+
+    pub fn from_config(config: Config) -> Self {
+        Self {
+            id: config.client_id.clone(),
+            output_folder: config.output_folder.clone(),
+        }
     }
 }
 
