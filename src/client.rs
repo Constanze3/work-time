@@ -1,8 +1,6 @@
+use crate::Config;
 use reqwest::Url;
 use serde_json::json;
-use std::fs::File;
-use std::io::{self, BufReader};
-use std::path::{Path, PathBuf};
 
 // the data recorded about each work session
 pub struct WorkData {
@@ -16,23 +14,12 @@ pub trait Client {
 }
 
 pub struct LocalClient {
-    id: String,
-    output_folder: PathBuf,
+    config: Config,
 }
 
 impl LocalClient {
-    pub fn from_config(config_file: &Path) -> Result<Self, io::Error> {
-        // let file = File::open(config_file)?;
-        // let mut buf_reader = BufReader::new(file);
-
-        // TODO initialize client from config file
-
-        let client = Self {
-            id: String::from("constanze"),
-            output_folder: PathBuf::from("."),
-        };
-
-        Ok(client)
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 }
 
@@ -81,5 +68,5 @@ fn test_send(client: &NetworkedClient, action: &str, message: &str) {
         "content": message
     });
 
-    client.send(action, test_data);
+    let _ = client.send(action, test_data);
 }

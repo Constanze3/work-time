@@ -1,31 +1,38 @@
 use axum::routing::post;
 use axum::{Json, Router};
 use client::{Client, LocalClient, NetworkedClient, WorkData};
+use config::{create_default_config, default_config_path, Config};
 use reqwest::Url;
 use std::io;
-use std::path::Path;
 
 mod client;
-mod command;
+mod config;
 
 fn main() {
+    let config_path = default_config_path().expect("path to config file should be valid");
+    let config = if config_path.exists() {
+        Config::load(config_path)
+    } else {
+        create_default_config(config_path)
+    }
+    .expect("config file should be valid");
+
+    let local_client = LocalClient::new(config);
+
+    let url = Url::parse("http://localhost:3000").unwrap();
+    let test_client = NetworkedClient::new(local_client, url);
+
     loop {
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("the input should be a string");
 
-        execute_command(input.trim());
+        execute_command(&test_client, input.trim());
     }
 }
 
-fn execute_command(command: &str) {
-    let dir = std::env::current_dir().unwrap();
-    let local_client = LocalClient::from_config(dir.as_path()).unwrap();
-
-    let url = Url::parse("http://localhost:3000").unwrap();
-    let client = NetworkedClient::new(local_client, url);
-
+fn execute_command(client: &impl Client, command: &str) {
     match command {
         "start" => client.work_started(),
         "end" => client.work_ended(WorkData {
