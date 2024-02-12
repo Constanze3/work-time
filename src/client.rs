@@ -1,8 +1,8 @@
+use reqwest::Url;
+use serde_json::json;
 use std::path::PathBuf;
 
 use crate::Config;
-use reqwest::Url;
-use serde_json::json;
 
 // the data recorded about each work session
 pub struct WorkData {

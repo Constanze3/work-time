@@ -1,11 +1,13 @@
 use axum::routing::post;
 use axum::{Json, Router};
-use client::{Client, LocalClient, NetworkedClient, WorkData};
-use config::{create_default_config, default_config_path, Config};
 use reqwest::Url;
 use std::io;
 
+use client::{Client, LocalClient, NetworkedClient, WorkData};
+use config::{create_default_config, default_config_path, Config};
+
 mod client;
+mod common;
 mod config;
 
 fn main() {
@@ -17,7 +19,7 @@ fn main() {
     }
     .expect("config file should be valid");
 
-    let local_client = LocalClient::new(config);
+    let local_client = LocalClient::from_config(config);
 
     let url = Url::parse("http://localhost:3000").unwrap();
     let test_client = NetworkedClient::new(local_client, url);

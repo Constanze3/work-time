@@ -1,7 +1,6 @@
+use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::{env, fs, io};
-
-use serde::{Deserialize, Serialize};
 
 pub fn default_config_path() -> Result<PathBuf, io::Error> {
     let mut dir = env::current_exe()?;
