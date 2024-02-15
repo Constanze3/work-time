@@ -1,7 +1,8 @@
 use reqwest::Url;
 use serde_json::json;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
+use crate::common;
 use crate::Config;
 
 // the data recorded about each work session
@@ -35,8 +36,10 @@ impl LocalClient {
 
 impl Client for LocalClient {
     fn work_started(&self) {
-        // TODO call common work_started here
+        let path = self.output_folder.join("work-started.txt");
+        common::work_started(&self.id, path).unwrap();
     }
+
     fn work_ended(&self, data: WorkData) {
         // TODO call common work_ended here
     }

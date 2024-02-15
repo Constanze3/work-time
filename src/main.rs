@@ -21,8 +21,10 @@ fn main() {
 
     let local_client = LocalClient::from_config(config);
 
-    let url = Url::parse("http://localhost:3000").unwrap();
-    let test_client = NetworkedClient::new(local_client, url);
+    let test_client = local_client;
+
+    // let url = Url::parse("http://localhost:3000").unwrap();
+    // let test_client = NetworkedClient::new(local_client, url);
 
     loop {
         let mut input = String::new();
